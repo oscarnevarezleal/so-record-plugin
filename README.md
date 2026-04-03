@@ -4,11 +4,28 @@ Record Playwright browser sessions as cinematic videos with auto-zoom, rounded c
 
 ## Install
 
-```bash
-git clone https://github.com/oscarnevarezleal/so-record-plugin ~/.claude/plugins/repos/so-record
+Add the marketplace to your Claude Code settings (`~/.claude/settings.json`):
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "so-record": {
+      "source": {
+        "source": "github",
+        "repo": "oscarnevarezleal/so-record-plugin"
+      }
+    }
+  }
+}
 ```
 
-Then restart Claude Code and run `/so-setup` to download binaries.
+Then install the plugin:
+
+```bash
+claude plugins install so-record@so-record
+```
+
+Restart Claude Code and run `/so-setup` to download binaries.
 
 ## Usage
 

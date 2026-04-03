@@ -2,11 +2,28 @@
 
 ## Install
 
-```bash
-git clone https://github.com/oscarnevarezleal/so-record-plugin ~/.claude/plugins/repos/so-record
+Add the marketplace to `~/.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "so-record": {
+      "source": {
+        "source": "github",
+        "repo": "oscarnevarezleal/so-record-plugin"
+      }
+    }
+  }
+}
 ```
 
-Restart Claude Code to load the plugin.
+Then install:
+
+```bash
+claude plugins install so-record@so-record
+```
+
+Restart Claude Code.
 
 ## First-Time Setup
 
