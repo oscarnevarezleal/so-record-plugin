@@ -1,6 +1,0 @@
-{
-  "playwright": {
-    "command": "npx",
-    "args": ["@playwright/mcp@latest", "--config", "${CLAUDE_PLUGIN_ROOT}/config/playwright-config.json"]
-  }
-}

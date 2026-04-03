@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Cinematic browser session recording for Claude Code",
-    "version": "0.0.1"
+    "version": "0.0.2"
   },
   "plugins": [
     {
       "name": "so-record",
       "source": "./plugins/so-record",
       "description": "Record Playwright browser sessions as polished videos with auto-zoom, rounded corners, and cinematic composition",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "keywords": ["recording", "video", "playwright", "cinematic", "browser"],
       "strict": false
     }
