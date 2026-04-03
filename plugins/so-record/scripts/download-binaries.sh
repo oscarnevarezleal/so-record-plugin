@@ -111,11 +111,12 @@ cat > "$SO_DIR/version.json" << EOF
 EOF
 
 # Generate Playwright config with absolute tracker.js path
+# Write into the plugin's config directory (where mcp-servers.json references it)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TRACKER_PATH="$SCRIPT_DIR/../config/tracker.js"
-TRACKER_PATH="$(cd "$(dirname "$TRACKER_PATH")" && pwd)/$(basename "$TRACKER_PATH")"
+CONFIG_DIR="$SCRIPT_DIR/../config"
+TRACKER_PATH="$(cd "$CONFIG_DIR" && pwd)/tracker.js"
 
-cat > "$SO_DIR/playwright-config.json" << PEOF
+cat > "$CONFIG_DIR/playwright-config.json" << PEOF
 {
   "browser": {
     "isolated": true,
@@ -140,5 +141,5 @@ echo "Installed $LATEST for $PLATFORM"
 echo "  so-engine-cli:      $BIN_DIR/so-engine-cli"
 echo "  native-export-cli:  $BIN_DIR/native-export-cli"
 echo "  ffmpeg:             $BIN_DIR/ffmpeg"
-echo "  playwright-config:  $SO_DIR/playwright-config.json"
+echo "  playwright-config:  $CONFIG_DIR/playwright-config.json"
 echo "  tracker.js:         $TRACKER_PATH"
