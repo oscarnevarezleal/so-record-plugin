@@ -1,0 +1,15 @@
+{
+  "name": "so-record",
+  "version": "0.0.3",
+  "description": "Cinematic browser session recording for Claude Code. Record Playwright sessions as polished videos with auto-zoom.",
+  "author": {
+    "name": "Oscar Nevarez"
+  },
+  "repository": "https://github.com/oscarnevarezleal/so-record-plugin",
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--config", "${CLAUDE_PLUGIN_ROOT}/config/playwright-config.json"]
+    }
+  }
+}
