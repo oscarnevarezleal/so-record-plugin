@@ -1,0 +1,21 @@
+{
+  "name": "so-record",
+  "owner": {
+    "name": "Oscar Nevarez",
+    "email": "oscar@oscarnevarez.com"
+  },
+  "metadata": {
+    "description": "Cinematic browser session recording for Claude Code",
+    "version": "0.0.1"
+  },
+  "plugins": [
+    {
+      "name": "so-record",
+      "source": "./plugins/so-record",
+      "description": "Record Playwright browser sessions as polished videos with auto-zoom, rounded corners, and cinematic composition",
+      "version": "0.0.1",
+      "keywords": ["recording", "video", "playwright", "cinematic", "browser"],
+      "strict": false
+    }
+  ]
+}
