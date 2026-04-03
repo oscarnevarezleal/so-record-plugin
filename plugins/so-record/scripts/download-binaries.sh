@@ -110,7 +110,35 @@ cat > "$SO_DIR/version.json" << EOF
 }
 EOF
 
+# Generate Playwright config with absolute tracker.js path
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TRACKER_PATH="$SCRIPT_DIR/../config/tracker.js"
+TRACKER_PATH="$(cd "$(dirname "$TRACKER_PATH")" && pwd)/$(basename "$TRACKER_PATH")"
+
+cat > "$SO_DIR/playwright-config.json" << PEOF
+{
+  "browser": {
+    "isolated": true,
+    "contextOptions": {
+      "viewport": { "width": 1920, "height": 1080 },
+      "deviceScaleFactor": 1,
+      "recordVideo": {
+        "dir": "./playwright-videos/",
+        "size": { "width": 1920, "height": 1080 }
+      }
+    },
+    "initScript": ["$TRACKER_PATH"]
+  },
+  "capabilities": ["core", "vision", "devtools"],
+  "outputDir": "./playwright-output",
+  "outputMode": "file",
+  "consoleLevel": "info"
+}
+PEOF
+
 echo "Installed $LATEST for $PLATFORM"
-echo "  so-engine-cli:    $BIN_DIR/so-engine-cli"
-echo "  native-export-cli: $BIN_DIR/native-export-cli"
-echo "  ffmpeg:           $BIN_DIR/ffmpeg"
+echo "  so-engine-cli:      $BIN_DIR/so-engine-cli"
+echo "  native-export-cli:  $BIN_DIR/native-export-cli"
+echo "  ffmpeg:             $BIN_DIR/ffmpeg"
+echo "  playwright-config:  $SO_DIR/playwright-config.json"
+echo "  tracker.js:         $TRACKER_PATH"

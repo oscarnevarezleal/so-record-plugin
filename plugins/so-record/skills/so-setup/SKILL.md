@@ -1,6 +1,6 @@
-# So Setup — Install So Record binaries and configure Playwright
+# So Setup — Install So Record
 
-Download pre-built binaries, configure Playwright for video recording, and verify everything works. Run once per machine.
+Download binaries and configure Playwright for video recording. Run once per machine.
 
 ## Usage
 
@@ -11,51 +11,22 @@ Download pre-built binaries, configure Playwright for video recording, and verif
 ## Allowed tools
 
 - `mcp__playwright__*`
-- `Bash(${CLAUDE_PLUGIN_ROOT}/scripts/download-binaries.sh, cat $HOME/.so/version.json, $HOME/.so/bin/so-engine-cli *, ls *)`
-- `Write`
+- `Bash(${CLAUDE_PLUGIN_ROOT}/scripts/download-binaries.sh)`
 
 ## Instructions
 
-### Step 1: Download binaries
+### Step 1: Run setup
 
 ```bash
 ${CLAUDE_PLUGIN_ROOT}/scripts/download-binaries.sh
 ```
 
-This downloads `so-engine-cli`, `native-export-cli`, and `ffmpeg` to `~/.so/bin/`.
+This downloads binaries to `~/.so/bin/` and generates `~/.so/playwright-config.json` with the cursor tracker configured.
 
-### Step 2: Generate Playwright config
+### Step 2: Verify Playwright MCP
 
-The Playwright config needs an absolute path to `tracker.js`. Use the Write tool to create `~/.so/playwright-config.json`:
+Check if `mcp__playwright__browser_navigate` is available. If not:
+> "Restart this session to load Playwright MCP, then use `/so-record`."
 
-```json
-{
-  "browser": {
-    "isolated": true,
-    "contextOptions": {
-      "viewport": { "width": 1920, "height": 1080 },
-      "deviceScaleFactor": 1,
-      "recordVideo": {
-        "dir": "./playwright-videos/",
-        "size": { "width": 1920, "height": 1080 }
-      }
-    },
-    "initScript": ["TRACKER_PATH"]
-  },
-  "capabilities": ["core", "vision", "devtools"],
-  "outputDir": "./playwright-output",
-  "outputMode": "file",
-  "consoleLevel": "info"
-}
-```
-
-Replace `TRACKER_PATH` with the absolute path to `${CLAUDE_PLUGIN_ROOT}/config/tracker.js`.
-
-### Step 3: Verify Playwright MCP
-
-Check if `mcp__playwright__browser_navigate` is available as a tool. If not:
-> "Playwright MCP not loaded. Restart this session to pick it up."
-
-### Step 4: Report
-
+If available:
 > "Setup complete. Use `/so-record <instructions>` to record browser sessions."

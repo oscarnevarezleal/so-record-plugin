@@ -1,6 +1,6 @@
 {
   "playwright": {
-    "command": "npx",
-    "args": ["@playwright/mcp@latest", "--config", "${CLAUDE_PLUGIN_ROOT}/config/playwright-config.json"]
+    "command": "bash",
+    "args": ["-c", "npx @playwright/mcp@latest --config $HOME/.so/playwright-config.json"]
   }
 }
