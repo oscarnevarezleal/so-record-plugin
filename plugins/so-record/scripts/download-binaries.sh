@@ -36,10 +36,14 @@ esac
 
 echo "Platform: $PLATFORM"
 
-# Get latest release version
+# Get latest release version (uses gh CLI for auth with private repos)
 echo "Checking latest release..."
-LATEST=$(curl -sL "https://api.github.com/repos/$REPO/releases" | \
-  python3 -c "import sys,json; releases=json.load(sys.stdin); cli=[r for r in releases if r['tag_name'].startswith('cli-v')]; print(cli[0]['tag_name'] if cli else '')" 2>/dev/null)
+if command -v gh &>/dev/null; then
+  LATEST=$(gh release list --repo "$REPO" --limit 10 2>/dev/null | grep "^cli-v" | head -1 | awk '{print $3}')
+else
+  LATEST=$(curl -sL "https://api.github.com/repos/$REPO/releases" | \
+    python3 -c "import sys,json; releases=json.load(sys.stdin); cli=[r for r in releases if r['tag_name'].startswith('cli-v')]; print(cli[0]['tag_name'] if cli else '')" 2>/dev/null)
+fi
 
 if [ -z "$LATEST" ]; then
   echo "No cli-v* releases found. Using development binaries." >&2
@@ -58,11 +62,15 @@ fi
 
 # Download release tarball
 TARBALL="so-record-${PLATFORM}.tar.gz"
-DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST/$TARBALL"
-echo "Downloading $DOWNLOAD_URL..."
+echo "Downloading $TARBALL from $LATEST..."
 
 TMPDIR=$(mktemp -d)
-curl -sL "$DOWNLOAD_URL" -o "$TMPDIR/$TARBALL"
+if command -v gh &>/dev/null; then
+  gh release download "$LATEST" --repo "$REPO" --pattern "$TARBALL" --dir "$TMPDIR" 2>/dev/null
+else
+  DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST/$TARBALL"
+  curl -sL "$DOWNLOAD_URL" -o "$TMPDIR/$TARBALL"
+fi
 
 if [ ! -s "$TMPDIR/$TARBALL" ]; then
   echo "Error: Download failed or empty file" >&2
