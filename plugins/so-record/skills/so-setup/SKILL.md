@@ -27,7 +27,7 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/download-binaries.sh
 
 Check if `.mcp.json` exists in the current directory. If it does, read it. If it already has a `playwright` entry, skip this step.
 
-Otherwise, use the Write tool to create or update `.mcp.json` in the current working directory with the Playwright MCP server. The config path must be the absolute path printed by the download script (look for `playwright-config:` in the output).
+Otherwise, use the Write tool to create or update `.mcp.json` with the Playwright MCP server. Use the `playwright-config:` path from the download script output.
 
 Example `.mcp.json`:
 ```json
@@ -35,18 +35,22 @@ Example `.mcp.json`:
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["@playwright/mcp@latest", "--config", "/absolute/path/to/playwright-config.json"]
+      "args": ["@playwright/mcp@latest", "--config", "/path/from/download/output/playwright-config.json"]
     }
   }
 }
 ```
 
-Use the actual path from the download script output for the `--config` value.
+### Step 3: Add so to PATH
 
-### Step 3: Report
+Tell the user to add `~/.so/bin` to their PATH if not already there:
 
-If Playwright MCP tools are available:
-> "Setup complete. Use `/so-record <instructions>` to record browser sessions."
+> Add to your shell profile (`~/.zshrc` or `~/.bashrc`):
+> ```
+> export PATH="$HOME/.so/bin:$PATH"
+> ```
+> Then restart your terminal and Claude Code.
 
-If not:
+### Step 4: Report
+
 > "Setup complete. Restart this session to load Playwright MCP, then use `/so-record`."

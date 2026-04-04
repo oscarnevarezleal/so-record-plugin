@@ -9,7 +9,7 @@
 ## Allowed tools
 
 - `mcp__playwright__*`
-- `Bash($HOME/.so/bin/so *)`
+- `Bash(so session *)`
 
 ## Instructions
 
@@ -17,11 +17,11 @@
 2. Run:
 
 ```bash
-$HOME/.so/bin/so session finalize ACTIVE_SESSION_ID
+so session finalize ACTIVE_SESSION_ID
 ```
 
-The `so` binary reads cursor data from console logs automatically, transcodes, computes zoom, composes, and opens the video. Report the output path.
+Report the output path.
 
 ## CRITICAL RULES
 
-- **NEVER build compound Bash commands.** Only call `$HOME/.so/bin/so`.
+- **NEVER build compound Bash commands.** Only call `so` with subcommands.

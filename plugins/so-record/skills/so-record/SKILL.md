@@ -13,15 +13,17 @@ Record a Playwright browser session and produce a polished, cinematic video with
 ## Allowed tools
 
 - `mcp__playwright__*`
-- `Bash($HOME/.so/bin/so *)`
+- `Bash(so session *, so hook)`
 
 ## Instructions
 
 ### Step 1: Initialize session
 
 ```bash
-$HOME/.so/bin/so session init
+so session init
 ```
+
+Note: `so` must be on PATH. If not found, tell user to add `~/.so/bin` to their PATH or run `/so-setup`.
 
 If this prints "ERROR", tell the user to run `/so-setup` and stop.
 
@@ -39,7 +41,7 @@ Otherwise it prints a SESSION_ID. Remember it.
 2. Run:
 
 ```bash
-$HOME/.so/bin/so session finalize SESSION_ID
+so session finalize SESSION_ID
 ```
 
 Replace SESSION_ID with the actual ID from step 1.
