@@ -137,7 +137,17 @@ cat > "$CONFIG_DIR/playwright-config.json" << PEOF
 }
 PEOF
 
+# Add ~/.so/bin to PATH in shell profiles (idempotent)
+for profile in "$HOME/.zprofile" "$HOME/.zshrc" "$HOME/.bashrc" "$HOME/.bash_profile"; do
+  if [ -f "$profile" ] || [ "$profile" = "$HOME/.zprofile" ]; then
+    if ! grep -q '.so/bin' "$profile" 2>/dev/null; then
+      echo 'export PATH="$HOME/.so/bin:$PATH"' >> "$profile"
+    fi
+  fi
+done
+
 echo "Installed $LATEST for $PLATFORM"
+echo "  so:                 $BIN_DIR/so"
 echo "  so-engine-cli:      $BIN_DIR/so-engine-cli"
 echo "  native-export-cli:  $BIN_DIR/native-export-cli"
 echo "  ffmpeg:             $BIN_DIR/ffmpeg"
