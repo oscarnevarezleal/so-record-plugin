@@ -6,7 +6,9 @@ set -e
 SESSION_ID="${1:?Usage: so-finalize-session.sh <SESSION_ID>}"
 SESSION_DIR="$HOME/.so/sessions/$SESSION_ID"
 CLI="$HOME/.so/bin/so-engine-cli"
-FFMPEG="$HOME/.so/bin/ffmpeg"
+
+# Add ~/.so/bin to PATH so so-engine-cli can find ffmpeg/ffprobe
+export PATH="$HOME/.so/bin:$PATH"
 
 # Find most recent WebM
 WEBM=$(ls -t playwright-videos/*.webm 2>/dev/null | head -1)
