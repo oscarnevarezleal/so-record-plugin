@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/so-hook.sh",
+            "command": "$HOME/.so/bin/so hook",
             "timeout": 10
           }
         ]
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/so-hook.sh",
+            "command": "$HOME/.so/bin/so hook",
             "timeout": 10
           }
         ]

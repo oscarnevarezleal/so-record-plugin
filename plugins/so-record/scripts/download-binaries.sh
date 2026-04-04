@@ -81,7 +81,7 @@ fi
 # Extract
 echo "Extracting to $BIN_DIR..."
 tar -xzf "$TMPDIR/$TARBALL" -C "$BIN_DIR"
-chmod +x "$BIN_DIR/so-engine-cli" "$BIN_DIR/native-export-cli" 2>/dev/null || true
+chmod +x "$BIN_DIR/so" "$BIN_DIR/so-engine-cli" "$BIN_DIR/native-export-cli" 2>/dev/null || true
 rm -rf "$TMPDIR"
 
 # Download ffmpeg if missing

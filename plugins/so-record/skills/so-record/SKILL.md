@@ -13,20 +13,19 @@ Record a Playwright browser session and produce a polished, cinematic video with
 ## Allowed tools
 
 - `mcp__playwright__*`
-- `Bash(${CLAUDE_PLUGIN_ROOT}/scripts/so-init-session.sh, ${CLAUDE_PLUGIN_ROOT}/scripts/so-finalize-session.sh, ${CLAUDE_PLUGIN_ROOT}/scripts/so-finalize-session.sh *)`
-- `Write`
+- `Bash($HOME/.so/bin/so *)`
 
 ## Instructions
 
 ### Step 1: Initialize session
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/so-init-session.sh
+$HOME/.so/bin/so session init
 ```
 
 If this prints "ERROR", tell the user to run `/so-setup` and stop.
 
-Otherwise it prints a SESSION_ID (e.g. `20260402-104847`). Remember it.
+Otherwise it prints a SESSION_ID. Remember it.
 
 ### Step 2: Execute
 
@@ -34,34 +33,23 @@ Otherwise it prints a SESSION_ID (e.g. `20260402-104847`). Remember it.
 
 **If no args:** Say "Recording. Use `/so-stop` when done."
 
-### Step 3: Retrieve cursor data
-
-**THIS STEP IS MANDATORY. Do NOT skip it.**
-
-Before closing the browser:
-
-1. Call `mcp__playwright__browser_console_messages` with level "info" and all: true
-2. From the response, extract all lines containing `[SO_CURSOR]`
-3. Parse the JSON object after each `[SO_CURSOR]` prefix
-4. Collect into an array and use Write tool to save as `~/.so/sessions/SESSION_ID/cursor.json`
-5. If no `[SO_CURSOR]` lines found, skip saving
-
-### Step 4: Finalize
+### Step 3: Finalize
 
 1. Call `mcp__playwright__browser_close`
 2. Run:
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/so-finalize-session.sh SESSION_ID
+$HOME/.so/bin/so session finalize SESSION_ID
 ```
 
 Replace SESSION_ID with the actual ID from step 1.
 
-Report the video path and file size.
+This single command handles everything: finds the video, extracts cursor data from console logs, transcodes, computes zoom, applies cinematic composition, and opens the result.
+
+Report the video path from the output.
 
 ## CRITICAL RULES
 
-- **NEVER build compound Bash commands.** Only call the scripts above.
+- **NEVER build compound Bash commands.** Only call `$HOME/.so/bin/so` with subcommands.
 - **NEVER call `browser_start_video` or `browser_stop_video`.** Video recording is automatic.
-- **ALWAYS retrieve cursor data (Step 3) before closing the browser (Step 4).**
 - **Do not mention "recording" during Playwright work.**
