@@ -23,11 +23,13 @@ Download binaries, configure Playwright MCP, and set up video recording. Run onc
 ${CLAUDE_PLUGIN_ROOT}/scripts/download-binaries.sh
 ```
 
+This downloads `so`, `so-engine-cli`, `native-export-cli`, and `ffmpeg` to `~/.so/bin/`. It also adds `~/.so/bin` to the user's shell profiles automatically.
+
 ### Step 2: Add Playwright MCP to this project
 
-Check if `.mcp.json` exists in the current directory. If it does, read it. If it already has a `playwright` entry, skip this step.
+Check if `.mcp.json` exists in the current directory. Read it if so. If it already has a `playwright` entry, skip.
 
-Otherwise, use the Write tool to create or update `.mcp.json` with the Playwright MCP server. Use the `playwright-config:` path from the download script output.
+Otherwise, use the Write tool to create `.mcp.json`. Use the `playwright-config:` path from the download script output.
 
 Example `.mcp.json`:
 ```json
@@ -35,22 +37,18 @@ Example `.mcp.json`:
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["@playwright/mcp@latest", "--config", "/path/from/download/output/playwright-config.json"]
+      "args": ["@playwright/mcp@latest", "--config", "PLAYWRIGHT_CONFIG_PATH"]
     }
   }
 }
 ```
 
-### Step 3: Add so to PATH
+Replace `PLAYWRIGHT_CONFIG_PATH` with the actual path from the download output.
 
-Tell the user to add `~/.so/bin` to their PATH if not already there:
+### Step 3: Report
 
-> Add to your shell profile (`~/.zshrc` or `~/.bashrc`):
-> ```
-> export PATH="$HOME/.so/bin:$PATH"
-> ```
-> Then restart your terminal and Claude Code.
+Tell the user exactly this:
 
-### Step 4: Report
-
-> "Setup complete. Restart this session to load Playwright MCP, then use `/so-record`."
+> **Setup complete.** Close your terminal, reopen it, then start Claude Code again. This is needed once so the `so` command and Playwright MCP are available.
+>
+> After restarting, use `/so-record <instructions>` to record browser sessions.
