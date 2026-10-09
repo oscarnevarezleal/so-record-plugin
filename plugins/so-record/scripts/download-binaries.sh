@@ -28,6 +28,9 @@ case "$OS" in
       *)      echo "Error: Unsupported Linux architecture: $ARCH" >&2; exit 1 ;;
     esac
     ;;
+  MINGW*|MSYS*|CYGWIN*)
+    PLATFORM="windows-x64"
+    ;;
   *)
     echo "Error: Unsupported OS: $OS" >&2
     exit 1
@@ -60,19 +63,23 @@ if [ "$INSTALLED_VERSION" = "$LATEST" ]; then
   exit 0
 fi
 
-# Download release tarball
-TARBALL="so-record-${PLATFORM}.tar.gz"
-echo "Downloading $TARBALL from $LATEST..."
+# Download release archive
+if [ "$PLATFORM" = "windows-x64" ]; then
+  ARCHIVE="so-record-${PLATFORM}.zip"
+else
+  ARCHIVE="so-record-${PLATFORM}.tar.gz"
+fi
+echo "Downloading $ARCHIVE from $LATEST..."
 
 TMPDIR=$(mktemp -d)
 if command -v gh &>/dev/null; then
-  gh release download "$LATEST" --repo "$REPO" --pattern "$TARBALL" --dir "$TMPDIR" 2>/dev/null
+  gh release download "$LATEST" --repo "$REPO" --pattern "$ARCHIVE" --dir "$TMPDIR" 2>/dev/null
 else
-  DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST/$TARBALL"
-  curl -sL "$DOWNLOAD_URL" -o "$TMPDIR/$TARBALL"
+  DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST/$ARCHIVE"
+  curl -sL "$DOWNLOAD_URL" -o "$TMPDIR/$ARCHIVE"
 fi
 
-if [ ! -s "$TMPDIR/$TARBALL" ]; then
+if [ ! -s "$TMPDIR/$ARCHIVE" ]; then
   echo "Error: Download failed or empty file" >&2
   rm -rf "$TMPDIR"
   exit 1
@@ -80,8 +87,12 @@ fi
 
 # Extract
 echo "Extracting to $BIN_DIR..."
-tar -xzf "$TMPDIR/$TARBALL" -C "$BIN_DIR"
-chmod +x "$BIN_DIR/so" "$BIN_DIR/so-engine-cli" "$BIN_DIR/native-export-cli" 2>/dev/null || true
+if [ "$PLATFORM" = "windows-x64" ]; then
+  unzip -o "$TMPDIR/$ARCHIVE" -d "$BIN_DIR"
+else
+  tar -xzf "$TMPDIR/$ARCHIVE" -C "$BIN_DIR"
+  chmod +x "$BIN_DIR/so" "$BIN_DIR/so-engine-cli" "$BIN_DIR/native-export-cli" "$BIN_DIR/so-compose-ffmpeg" 2>/dev/null || true
+fi
 rm -rf "$TMPDIR"
 
 # Download ffmpeg if missing
@@ -91,6 +102,7 @@ if [ ! -f "$BIN_DIR/ffmpeg" ]; then
     darwin-arm64)  FFMPEG_TARGET="darwin-arm64" ;;
     darwin-x64)    FFMPEG_TARGET="darwin-x64" ;;
     linux-x64)     FFMPEG_TARGET="linux-x64" ;;
+    windows-x64)   FFMPEG_TARGET="win32-x64" ;;
   esac
   curl -sL "$FFMPEG_BASE_URL/ffmpeg-$FFMPEG_TARGET" -o "$BIN_DIR/ffmpeg"
   chmod +x "$BIN_DIR/ffmpeg"
@@ -149,7 +161,8 @@ done
 echo "Installed $LATEST for $PLATFORM"
 echo "  so:                 $BIN_DIR/so"
 echo "  so-engine-cli:      $BIN_DIR/so-engine-cli"
-echo "  native-export-cli:  $BIN_DIR/native-export-cli"
+echo "  so-compose-ffmpeg:  $BIN_DIR/so-compose-ffmpeg"
+echo "  native-export-cli:  $BIN_DIR/native-export-cli (macOS only)"
 echo "  ffmpeg:             $BIN_DIR/ffmpeg"
 echo "  playwright-config:  $CONFIG_DIR/playwright-config.json"
 echo "  tracker.js:         $TRACKER_PATH"
